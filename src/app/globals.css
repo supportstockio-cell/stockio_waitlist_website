@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+:root {
+  /* Coco Noir — warm-tinted neutral scale (hue 55 = warm brown/espresso) */
+  --noir-950: oklch(0.15 0.018 55);
+  --noir-900: oklch(0.185 0.02 55);
+  --noir-850: oklch(0.22 0.022 54);
+  --noir-800: oklch(0.27 0.024 53);
+  --noir-700: oklch(0.34 0.024 52);
+  --noir-600: oklch(0.44 0.022 52);
+  --noir-400: oklch(0.62 0.018 55);
+  --noir-200: oklch(0.86 0.014 60);
+  --noir-100: oklch(0.94 0.01 62);
+  --noir-050: oklch(0.975 0.006 65);
+
+  /* Amber Lux — the single accent, used sparingly */
+  --amber-700: oklch(0.58 0.135 65);
+  --amber-600: oklch(0.68 0.15 68);
+  --amber-500: oklch(0.775 0.152 73);
+  --amber-400: oklch(0.85 0.115 78);
+  --amber-300: oklch(0.905 0.078 82);
+
+  --background: var(--noir-950);
+  --foreground: var(--noir-050);
+
+  /* 4pt spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  --space-4xl: 4rem;
+  --space-5xl: 6rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-noir-950: var(--noir-950);
+  --color-noir-900: var(--noir-900);
+  --color-noir-850: var(--noir-850);
+  --color-noir-800: var(--noir-800);
+  --color-noir-700: var(--noir-700);
+  --color-noir-600: var(--noir-600);
+  --color-noir-400: var(--noir-400);
+  --color-noir-200: var(--noir-200);
+  --color-noir-100: var(--noir-100);
+  --color-noir-050: var(--noir-050);
+  --color-amber-700: var(--amber-700);
+  --color-amber-600: var(--amber-600);
+  --color-amber-500: var(--amber-500);
+  --color-amber-400: var(--amber-400);
+  --color-amber-300: var(--amber-300);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+* {
+  border-color: var(--noir-800);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--amber-500);
+  color: var(--noir-950);
+}
+
+/* fluid modular type scale — 1.333 ratio, clamps between mobile and desktop */
+.text-display-xl {
+  font-size: clamp(2.75rem, 1.65rem + 5.2vw, 6.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+
+.text-display-lg {
+  font-size: clamp(2.1rem, 1.5rem + 2.8vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+
+.text-display-md {
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
+  line-height: 1.1;
+}
+
+@keyframes glow-drift {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 0.9s var(--ease-out-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
