@@ -201,8 +201,8 @@ export default function Home() {
                 to break ground.
               </h2>
               <p className="mt-6 text-[17px] leading-relaxed text-noir-200">
-                Join before launch for founder pricing on your first Credits
-                pack, plus early access the day the doors open on iOS.
+                Get notified the moment Stockio goes live on iOS, and start
+                climbing while the leaderboard is still wide open.
               </p>
               <div className="mt-8 max-w-lg">
                 <WaitlistForm compact />
