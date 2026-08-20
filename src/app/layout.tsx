@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: "Stockio: build a city powered by the real stock market",
   description:
     "Call the market, earn points for accuracy, and acquire buildings modeled on real companies. Your city rises and falls with the real market. No real money, all the stakes. Join the Stockio waitlist.",
-  metadataBase: new URL("https://stockio.app"),
+  metadataBase: new URL("https://stockio.org"),
   openGraph: {
     title: "Stockio: build a city powered by the real stock market",
     description:
