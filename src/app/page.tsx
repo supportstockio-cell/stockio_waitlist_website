@@ -4,170 +4,203 @@ import WaitlistForm from "@/components/WaitlistForm";
 const LOOP_STEPS = [
   {
     n: "01",
-    title: "Predict",
-    body: "Every evening after close, call one stock up or down for the next session. Same number of calls for everyone — no volume advantage.",
+    title: "Call it",
+    body: "Pick a stock, pick a direction, pick your window. It works like trading options: you are calling where a price goes and by when. Call as often as you like.",
   },
   {
     n: "02",
     title: "Earn",
-    body: "Accuracy earns points. Nothing else does. Your rank is always earned, never bought.",
+    body: "Correct calls pay out in points. A call can resolve mid session or at the close, so a sharp read can land in minutes instead of overnight.",
   },
   {
     n: "03",
     title: "Acquire",
-    body: "Spend points to acquire a building modeled on a real company — the way you'd buy the stock itself.",
+    body: "Spend points to acquire a building modeled on a real company, the same way you would buy the stock itself.",
   },
   {
     n: "04",
-    title: "Watch it live",
-    body: "Owned buildings rise and fall with that company's real performance, independent of your daily calls.",
+    title: "Watch it trade",
+    body: "Every building you own keeps living. It rises and falls with that company's real market performance, long after the call that earned it.",
   },
 ];
 
 const FAIR_PLAY = [
-  "Predictions lock the moment the market opens — no mid-session edits.",
-  "Every call resolves only against the official closing price.",
-  "Currency can buy cosmetics and convenience. It can never buy accuracy.",
+  "Calls lock the moment you place them and resolve against real market data.",
+  "Play more and read sharper to climb faster. Volume and accuracy both count.",
+  "Credits buy cosmetics, skins and build speed. They never buy a correct call.",
+];
+
+const LEADERBOARD = [
+  "Weekly and global rankings scored on accuracy, never on spend.",
+  "Percentile placement, so a new player always has a rung to climb.",
+  "Hostile takeovers: beat a rival on weekly accuracy and absorb part of their city into yours.",
 ];
 
 export default function Home() {
   return (
-    <div className="relative">
+    <>
       <CityBackground />
 
-      {/* Nav */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7 sm:px-10">
-        <span className="font-display text-xl tracking-[0.02em] text-noir-050">
-          Stockio
-        </span>
-        <a
-          href="#waitlist"
-          className="text-sm text-noir-100 underline decoration-noir-600 decoration-1 underline-offset-4 transition-colors duration-200 hover:text-amber-400 hover:decoration-amber-500"
-        >
-          Get early access
-        </a>
-      </header>
-
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pt-16 pb-32 sm:px-10 sm:pt-24 sm:pb-44">
-        <div className="max-w-2xl animate-rise-in">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
-            Coming to iOS · Waitlist open
-          </p>
-          <h1 className="font-display text-display-xl text-noir-050">
-            The market
-            <br />
-            builds your <em className="not-italic text-amber-500">city.</em>
-          </h1>
-          <p className="mt-7 max-w-[42ch] text-lg leading-relaxed text-noir-100 sm:text-xl">
-            Build a city powered by the real stock market — no real money,
-            all the stakes.
-          </p>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-noir-200">
-            Predict the day&rsquo;s move, earn points for accuracy, and
-            acquire buildings modeled on real companies. Every building you
-            own keeps living, rising and falling with what that company
-            actually does in the market.
-          </p>
-
-          <div id="waitlist" className="mt-10 max-w-lg scroll-mt-28">
-            <WaitlistForm />
-            <p className="mt-3 text-xs text-noir-300">
-              Free to join. No real-money trading, ever. Unsubscribe
-              anytime.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* The Loop */}
-      <section className="border-t border-noir-800 bg-noir-950/85 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
-          <div className="mb-14 max-w-xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
-              The core loop
-            </p>
-            <h2 className="font-display text-display-lg text-noir-050">
-              One prediction a day.
-              <br />A skyline that never stops.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2">
-            {LOOP_STEPS.map((step) => (
-              <div key={step.n} className="flex gap-5">
-                <span className="font-display text-3xl leading-none text-amber-500/70">
-                  {step.n}
-                </span>
-                <div>
-                  <h3 className="font-display text-xl text-noir-050">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 max-w-[42ch] text-[15px] leading-relaxed text-noir-300">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stakes / fairness statement */}
-      <section className="border-t border-noir-800 bg-noir-900/90 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.8fr] lg:gap-16">
-            <p className="font-display text-display-md text-noir-100">
-              No real money. <span className="text-amber-500">All the stakes.</span>{" "}
-              Your city is a scoreboard for how well you actually read the
-              market — nothing more, nothing less.
-            </p>
-            <ul className="flex flex-col gap-5 border-t border-noir-800 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
-              {FAIR_PLAY.map((item) => (
-                <li
-                  key={item}
-                  className="text-[15px] leading-relaxed text-noir-200"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Second CTA */}
-      <section className="border-t border-noir-800 bg-noir-950/90 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
-          <div className="max-w-xl">
-            <h2 className="font-display text-display-lg text-noir-050">
-              Your skyline is waiting to
-              <br />
-              break ground.
-            </h2>
-            <p className="mt-5 text-[15px] leading-relaxed text-noir-300">
-              Join before launch and get founder pricing on your first Credits
-              pack, plus early access the day the doors open on iOS.
-            </p>
-            <div className="mt-8 max-w-lg">
-              <WaitlistForm compact />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-noir-800 bg-noir-950/95">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
-          <span className="font-display text-base text-noir-200">
+      <div className="page-shell relative">
+        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7 sm:px-10">
+          <span className="font-display text-2xl font-extrabold uppercase tracking-[0.06em] text-noir-050">
             Stockio
           </span>
-          <p className="text-xs text-noir-400">
-            &copy; {new Date().getFullYear()} Stockio. Skill-based prediction
-            game. No real-money wagering.
-          </p>
-        </div>
-      </footer>
-    </div>
+          <a
+            href="#waitlist"
+            className="eyebrow text-noir-200 transition-colors duration-200 hover:text-amber-400"
+          >
+            Get early access
+          </a>
+        </header>
+
+        {/* Hero sits on the scrim alone, no panel behind it, so the city reads
+            at full strength exactly where it is most striking. */}
+        <section className="mx-auto max-w-6xl px-6 pt-16 pb-32 sm:px-10 sm:pt-24 sm:pb-44">
+          <div className="max-w-3xl animate-rise-in">
+            <p className="eyebrow mb-6 text-amber-500">
+              Coming to iOS · Waitlist open
+            </p>
+            <h1 className="font-display text-display-xl font-extrabold uppercase text-noir-050">
+              The market
+              <br />
+              builds your <span className="text-amber-500">city</span>
+            </h1>
+            <p className="mt-8 max-w-[40ch] text-lg leading-relaxed text-noir-100 sm:text-xl">
+              Build a city powered by the real stock market. No real money,
+              all the stakes.
+            </p>
+            <p className="mt-4 max-w-[54ch] text-[15px] leading-relaxed text-noir-200">
+              Call where a stock is heading, earn points when you are right,
+              and spend them on buildings modeled on real companies. Every
+              building you own keeps trading with the market that built it.
+            </p>
+
+            <div id="waitlist" className="mt-10 max-w-lg scroll-mt-28">
+              <WaitlistForm />
+              <p className="mt-3 text-xs text-noir-300">
+                Free to join. No real-money trading, ever. Unsubscribe
+                anytime.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-md">
+          <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
+            <div className="mb-16 max-w-2xl">
+              <p className="eyebrow mb-4 text-amber-500">The core loop</p>
+              <h2 className="font-display text-display-lg font-bold uppercase text-noir-050">
+                Read the market.
+                <br />
+                Build the skyline.
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-2">
+              {LOOP_STEPS.map((step) => (
+                <div key={step.n} className="flex gap-5">
+                  <span className="pt-1.5 font-mono text-xs leading-none text-amber-500/80">
+                    {step.n}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-2xl font-bold uppercase tracking-[0.02em] text-noir-050">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 max-w-[44ch] text-[15px] leading-relaxed text-noir-300">
+                      {step.body}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-noir-800/80 bg-noir-900/75 backdrop-blur-md">
+          <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
+              <div>
+                <p className="eyebrow mb-4 text-amber-500">Competitive play</p>
+                <h2 className="font-display text-display-lg font-bold uppercase text-noir-050">
+                  Climb the board.
+                  <br />
+                  Take their block.
+                </h2>
+                <p className="mt-6 max-w-[46ch] text-[15px] leading-relaxed text-noir-300">
+                  Every call you make is scored against every other player.
+                  The leaderboard is the real game. Your city is just the
+                  scoreboard everyone else can see.
+                </p>
+              </div>
+              <ul className="flex flex-col gap-5 border-t border-noir-800 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
+                {LEADERBOARD.map((item) => (
+                  <li
+                    key={item}
+                    className="text-[15px] leading-relaxed text-noir-200"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-md">
+          <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.8fr] lg:gap-16">
+              <p className="font-display text-display-md font-semibold uppercase text-noir-100">
+                No real money.{" "}
+                <span className="text-amber-500">All the stakes.</span> Your
+                city is a scoreboard for how well you actually read the
+                market.
+              </p>
+              <ul className="flex flex-col gap-5 border-t border-noir-800 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
+                {FAIR_PLAY.map((item) => (
+                  <li
+                    key={item}
+                    className="text-[15px] leading-relaxed text-noir-200"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-noir-800/80 bg-noir-950/75 backdrop-blur-md">
+          <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
+            <div className="max-w-xl">
+              <h2 className="font-display text-display-lg font-bold uppercase text-noir-050">
+                Your skyline is waiting
+                <br />
+                to break ground.
+              </h2>
+              <p className="mt-6 text-[15px] leading-relaxed text-noir-300">
+                Join before launch for founder pricing on your first Credits
+                pack, plus early access the day the doors open on iOS.
+              </p>
+              <div className="mt-8 max-w-lg">
+                <WaitlistForm compact />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer className="border-t border-noir-800/80 bg-noir-950/90">
+          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <span className="font-display text-lg font-bold uppercase tracking-[0.06em] text-noir-200">
+              Stockio
+            </span>
+            <p className="text-xs text-noir-400">
+              &copy; {new Date().getFullYear()} Stockio. Skill-based
+              prediction game. No real-money wagering.
+            </p>
+          </div>
+        </footer>
+      </div>
+    </>
   );
 }

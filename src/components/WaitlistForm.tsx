@@ -19,7 +19,7 @@ export default function WaitlistForm({ compact = false }: { compact?: boolean })
 
     if (!EMAIL_RE.test(trimmed)) {
       setStatus("error");
-      setMessage("That doesn't look like a real email — double-check it.");
+      setMessage("That doesn't look like a real email. Double-check it.");
       return;
     }
 

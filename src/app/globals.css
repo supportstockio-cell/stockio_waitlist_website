@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Coco Noir — warm-tinted neutral scale (hue 55 = warm brown/espresso) */
+  /* Coco Noir: warm-tinted neutral scale (hue 55, espresso rather than grey) */
   --noir-950: oklch(0.15 0.018 55);
   --noir-900: oklch(0.185 0.02 55);
   --noir-850: oklch(0.22 0.022 54);
@@ -9,11 +9,12 @@
   --noir-700: oklch(0.34 0.024 52);
   --noir-600: oklch(0.44 0.022 52);
   --noir-400: oklch(0.62 0.018 55);
+  --noir-300: oklch(0.72 0.016 57);
   --noir-200: oklch(0.86 0.014 60);
   --noir-100: oklch(0.94 0.01 62);
   --noir-050: oklch(0.975 0.006 65);
 
-  /* Amber Lux — the single accent, used sparingly */
+  /* Amber Lux: the single accent, kept rare so it still lands */
   --amber-700: oklch(0.58 0.135 65);
   --amber-600: oklch(0.68 0.15 68);
   --amber-500: oklch(0.775 0.152 73);
@@ -23,7 +24,6 @@
   --background: var(--noir-950);
   --foreground: var(--noir-050);
 
-  /* 4pt spacing scale */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 0.75rem;
@@ -47,6 +47,7 @@
   --color-noir-700: var(--noir-700);
   --color-noir-600: var(--noir-600);
   --color-noir-400: var(--noir-400);
+  --color-noir-300: var(--noir-300);
   --color-noir-200: var(--noir-200);
   --color-noir-100: var(--noir-100);
   --color-noir-050: var(--noir-050);
@@ -57,6 +58,7 @@
   --color-amber-300: var(--amber-300);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -78,34 +80,42 @@ body {
   color: var(--noir-950);
 }
 
-/* fluid modular type scale — 1.333 ratio, clamps between mobile and desktop */
+/* Explore mode: the city takes over, page copy steps aside. */
+body[data-explore="on"] {
+  overflow: hidden;
+}
+.page-shell {
+  transition: opacity 0.5s var(--ease-out-expo);
+}
+body[data-explore="on"] .page-shell {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Display face is condensed, so the scale runs larger than a normal one would. */
 .text-display-xl {
-  font-size: clamp(2.75rem, 1.65rem + 5.2vw, 6.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.01em;
+  font-size: clamp(4rem, 2.1rem + 8.6vw, 10rem);
+  line-height: 0.86;
+  letter-spacing: -0.005em;
 }
 
 .text-display-lg {
-  font-size: clamp(2.1rem, 1.5rem + 2.8vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.75rem, 1.85rem + 4vw, 5.25rem);
+  line-height: 0.92;
 }
 
 .text-display-md {
-  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
-  line-height: 1.1;
+  font-size: clamp(1.85rem, 1.4rem + 2vw, 3rem);
+  line-height: 1.04;
 }
 
-@keyframes glow-drift {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-2px);
-  }
+/* Eyebrow / ticker label: mono here is semantic, the market's own idiom. */
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 @keyframes rise-in {
@@ -116,15 +126,6 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
   }
 }
 

@@ -1,27 +1,36 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Manrope } from "next/font/google";
+import { Big_Shoulders, Chivo, Martian_Mono } from "next/font/google";
 import "./globals.css";
 
-const bodoniModa = Bodoni_Moda({
+// Condensed, architectural, tall: the headline face is doing skyline work.
+const bigShoulders = Big_Shoulders({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700", "800", "900"],
+  fallback: ["Arial Narrow", "Helvetica Neue", "sans-serif"],
 });
 
-const manrope = Manrope({
+const chivo = Chivo({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
+// Reserved for tickers, step numbers and eyebrows, where mono is the market's
+// own idiom rather than decoration.
+const martianMono = Martian_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
 export const metadata: Metadata = {
-  title: "Stockio — Build a city powered by the real stock market",
+  title: "Stockio: build a city powered by the real stock market",
   description:
-    "Predict daily. Acquire real-company buildings with points. Watch your city rise and fall with the actual market. No real money, all the stakes. Join the Stockio waitlist.",
+    "Call the market, earn points for accuracy, and acquire buildings modeled on real companies. Your city rises and falls with the real market. No real money, all the stakes. Join the Stockio waitlist.",
   metadataBase: new URL("https://stockio.app"),
   openGraph: {
-    title: "Stockio — Build a city powered by the real stock market",
+    title: "Stockio: build a city powered by the real stock market",
     description:
       "No real money, all the stakes. Join the waitlist for early access.",
     type: "website",
@@ -32,7 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bodoniModa.variable} ${manrope.variable} h-full antialiased`}
+      className={`${bigShoulders.variable} ${chivo.variable} ${martianMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
