@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCity } from "./city-context";
 
 /**
  * Ambient 3D city (Three.js scene under /public/city), embedded as the page
@@ -8,42 +9,31 @@ import { useEffect, useState } from "react";
  *
  * Two modes, because the scene's OrbitControls bind wheel-to-zoom: left live,
  * the iframe would swallow every scroll and the page could not move. So by
- * default the iframe is inert and the city is pure atmosphere. "Explore" hands
+ * default the iframe is inert and the city is pure atmosphere. Explore hands
  * input over to the scene, steps the page copy aside, and lets you orbit and
  * click buildings for their company card.
  *
  * Stacking matters here: the backdrop must never sit on a negative z-index.
  * Behind the body box it still paints, but hit testing resolves to <body>
- * first, so drags and clicks never reach the canvas. It sits at z-0 instead
- * and is lifted above the copy while exploring. For the same reason the
- * trigger button is a sibling at z-50 rather than a child of the backdrop,
- * which would put it under the page copy and make it unclickable.
+ * first, so drags and clicks never reach the canvas.
+ *
+ * The scene mounts only after hydration, which keeps roughly 2MB of Three.js
+ * off the critical path so the hero paints first. Reduced-motion and Save-Data
+ * users get the gradient and never pay for the scene at all.
  */
 export default function CityBackground() {
-  const [exploring, setExploring] = useState(false);
-  const [pastCity, setPastCity] = useState(false);
+  const { exploring, setExploring } = useCity();
+  const [sceneOn, setSceneOn] = useState(false);
 
   useEffect(() => {
-    document.body.dataset.explore = exploring ? "on" : "off";
-  }, [exploring]);
-
-  useEffect(() => {
-    if (!exploring) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setExploring(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [exploring]);
-
-  // The trigger belongs to the city view, so it retires once the copy sections
-  // have taken over the screen rather than floating over them forever.
-  useEffect(() => {
-    const onScroll = () =>
-      setPastCity(window.scrollY > window.innerHeight * 0.72);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const conn = (
+      navigator as Navigator & { connection?: { saveData?: boolean } }
+    ).connection;
+    if (reduced || conn?.saveData) return;
+    setSceneOn(true);
   }, []);
 
   return (
@@ -53,14 +43,31 @@ export default function CityBackground() {
           exploring ? "z-30" : "z-0"
         }`}
       >
-        <iframe
-          src="/city/index.html"
-          title={exploring ? "Interactive city" : ""}
-          aria-hidden={!exploring}
-          tabIndex={-1}
-          className="h-full w-full border-0"
-          style={{ pointerEvents: exploring ? "auto" : "none" }}
-        />
+        {sceneOn ? (
+          <iframe
+            src="/city/index.html"
+            title={exploring ? "Interactive city" : ""}
+            aria-hidden={!exploring}
+            tabIndex={-1}
+            className="h-full w-full border-0"
+            style={{
+              pointerEvents: exploring ? "auto" : "none",
+              // Without this the browser claims touch gestures before the
+              // canvas sees them, so pinch and drag die on phones.
+              touchAction: exploring ? "none" : "auto",
+            }}
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="h-full w-full"
+            style={{
+              background:
+                "radial-gradient(120% 80% at 70% 88%, oklch(0.42 0.09 62) 0%, oklch(0.24 0.05 55) 38%, oklch(0.15 0.018 55) 78%)",
+            }}
+          />
+        )}
+
         {/* Scrim keeps hero copy legible; it lifts entirely in explore mode. */}
         <div
           aria-hidden="true"
@@ -73,37 +80,19 @@ export default function CityBackground() {
         />
       </div>
 
-      {exploring ? (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-4 px-6 pb-8">
-          <p className="rounded-sm bg-noir-950/80 px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] text-noir-100 backdrop-blur-md">
-            Drag to orbit · Scroll to zoom · Click a building
+      {exploring && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-3 px-4 pb-6 sm:gap-4 sm:pb-8">
+          <p className="rounded-sm bg-noir-950/80 px-3 py-2 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-noir-100 backdrop-blur-md sm:px-4 sm:text-xs sm:tracking-[0.14em]">
+            Drag to orbit · Pinch to zoom · Tap a building
           </p>
           <button
             type="button"
             onClick={() => setExploring(false)}
-            className="pointer-events-auto rounded-sm bg-amber-500 px-7 py-3.5 text-base font-semibold text-noir-950 shadow-lg shadow-noir-950/50 transition-colors duration-200 hover:bg-amber-400"
+            className="pointer-events-auto rounded-sm bg-amber-500 px-6 py-3.5 text-base font-semibold text-noir-950 shadow-lg shadow-noir-950/50 transition-colors duration-200 hover:bg-amber-400 sm:px-7"
           >
             Close city view
           </button>
         </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setExploring(true)}
-          aria-hidden={pastCity}
-          tabIndex={pastCity ? -1 : 0}
-          className={`fixed bottom-8 right-8 z-50 flex items-center gap-2.5 rounded-sm bg-amber-500 px-7 py-3.5 text-base font-semibold text-noir-950 shadow-lg shadow-noir-950/50 transition-all duration-300 hover:bg-amber-400 ${
-            pastCity
-              ? "pointer-events-none translate-y-2 opacity-0"
-              : "opacity-100"
-          }`}
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-noir-950 opacity-60 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-noir-950" />
-          </span>
-          Explore the city
-        </button>
       )}
     </>
   );

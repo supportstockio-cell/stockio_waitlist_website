@@ -39,16 +39,22 @@ const WINDOW_MATS = [M.litWarm, M.litCyan, M.winOff, M.winOff];
 
 /* ---------- scene ---------- */
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.shadowMap.enabled = true;
+/* Phones and low-core machines run a reduced pipeline: no shadow pass, no
+   antialias, device pixel ratio pinned to 1 and a smaller surrounding city.
+   Same scene, a fraction of the fill cost. */
+const LITE = innerWidth < 820 || (navigator.hardwareConcurrency || 8) <= 4;
+const renderer = new THREE.WebGLRenderer({antialias:!LITE, preserveDrawingBuffer:true});
+renderer.setPixelRatio(LITE ? 1 : Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled = !LITE;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.98;
 document.getElementById('stage').appendChild(renderer.domElement);
 
 const camera = new THREE.PerspectiveCamera(34, 2, 1, 3000);
-camera.position.set(700, 520, 780);
+// A narrow viewport crops the horizontal field, so back off to keep the skyline whole.
+const CAM_BACK = innerWidth < 820 ? 1.42 : 1;
+camera.position.set(700*CAM_BACK, 520*CAM_BACK, 780*CAM_BACK);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 22, 0);
 controls.enableDamping = true; controls.dampingFactor = .08;
@@ -72,8 +78,8 @@ scene.fog = new THREE.Fog(0x241710, 620, 2850);
 scene.add(new THREE.HemisphereLight(0x4A3524, 0x120E0A, .58));
 const sun = new THREE.DirectionalLight(0xFFB863, 1.9);
 sun.position.set(520, 700, 340);
-sun.castShadow = true;
-sun.shadow.mapSize.set(4096,4096);
+sun.castShadow = !LITE;
+sun.shadow.mapSize.set(LITE ? 1024 : 4096, LITE ? 1024 : 4096);
 const sc = sun.shadow.camera;
 sc.left=-470; sc.right=470; sc.top=470; sc.bottom=-470; sc.near=150; sc.far=2100;
 sun.shadow.bias = -0.0012; sun.shadow.normalBias = .9;
@@ -488,12 +494,12 @@ const { tickers: DISTRICT_TICKERS } = buildDistricts({
 /* ---------- surrounding city (density gradient) ---------- */
 {
   const cells=[];
-  const CELL=34, R=1280;
+  const CELL=34, R=LITE ? 760 : 1280;
   for(let x=-R;x<=R;x+=CELL) for(let z=-R;z<=R;z+=CELL){
       if(Math.abs(x)<396 && Math.abs(z)<396) continue;
     const d = Math.hypot(x,z);
     const falloff = Math.max(0, 1 - (d-400)/860);
-    if(Math.random() > .30 + falloff*.7) continue;
+    if(Math.random() > (LITE ? .15 : .30) + falloff*(LITE ? .38 : .7)) continue;
     const near = THREE.MathUtils.smoothstep(d,400,640);
     const h = Math.max(6, (9 + falloff*58) * rnd(.45,1.15) * (.42+near*.58));
     const w = CELL*rnd(.5,.82), dd = CELL*rnd(.5,.82);
@@ -502,7 +508,7 @@ const { tickers: DISTRICT_TICKERS } = buildDistricts({
   const geo = new THREE.BoxGeometry(1,1,1);
   const mat = new THREE.MeshStandardMaterial({color:0xffffff,roughness:.78,metalness:.02});
   const im = new THREE.InstancedMesh(geo, mat, cells.length);
-  im.name='surroundCity'; im.castShadow = true; im.receiveShadow = true;
+  im.name='surroundCity'; im.castShadow = !LITE; im.receiveShadow = !LITE;
   const mtx = new THREE.Matrix4(), q = new THREE.Quaternion(), col = new THREE.Color();
   cells.forEach((c,i)=>{
     q.setFromAxisAngle(new THREE.Vector3(0,1,0), Math.round(rnd(0,4))*Math.PI/2 + rnd(-.06,.06));
@@ -776,7 +782,7 @@ document.querySelectorAll('#layers .row').forEach(row=>{
   });
 });
 applyLayers();
-const HOME = {p:new THREE.Vector3(700,520,780), t:new THREE.Vector3(0,22,0)};
+const HOME = {p:new THREE.Vector3(700*CAM_BACK,520*CAM_BACK,780*CAM_BACK), t:new THREE.Vector3(0,22,0)};
 function dolly(f){
   const d = camera.position.clone().sub(controls.target);
   const len = THREE.MathUtils.clamp(d.length()*f, controls.minDistance, controls.maxDistance);
@@ -900,7 +906,7 @@ function frame(now){
 
   if(now - flickAt > 240){
     flickAt = now;
-    for(let i=0;i<14;i++){
+    for(let i=0;i<(LITE?5:14);i++){
       const w = windows[(Math.random()*windows.length)|0];
       if(w) w.material = pick(WINDOW_MATS);
     }

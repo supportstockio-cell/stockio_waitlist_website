@@ -94,13 +94,13 @@ body[data-explore="on"] .page-shell {
 
 /* Display face is condensed, so the scale runs larger than a normal one would. */
 .text-display-xl {
-  font-size: clamp(4rem, 2.1rem + 8.6vw, 10rem);
+  font-size: clamp(3rem, 1.18rem + 9.1vw, 9.5rem);
   line-height: 0.86;
   letter-spacing: -0.005em;
 }
 
 .text-display-lg {
-  font-size: clamp(2.75rem, 1.85rem + 4vw, 5.25rem);
+  font-size: clamp(2.25rem, 1.4rem + 4.2vw, 5rem);
   line-height: 0.92;
 }
 

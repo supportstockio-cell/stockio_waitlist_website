@@ -1,4 +1,6 @@
 import CityBackground from "@/components/CityBackground";
+import ExploreCityButton from "@/components/ExploreCityButton";
+import { CityProvider } from "@/components/city-context";
 import WaitlistForm from "@/components/WaitlistForm";
 
 const LOOP_STEPS = [
@@ -38,7 +40,7 @@ const LEADERBOARD = [
 
 export default function Home() {
   return (
-    <>
+    <CityProvider>
       <CityBackground />
 
       <div className="page-shell relative z-10">
@@ -58,7 +60,7 @@ export default function Home() {
 
         {/* Hero sits on the scrim alone, no panel behind it, so the city reads
             at full strength exactly where it is most striking. */}
-        <section className="mx-auto max-w-6xl px-6 pt-16 pb-32 sm:px-10 sm:pt-24 sm:pb-44">
+        <section className="relative mx-auto max-w-6xl px-6 pt-12 pb-28 sm:px-10 sm:pt-20 sm:pb-44">
           <div className="max-w-3xl animate-rise-in">
             <p className="eyebrow mb-6 text-amber-500">
               Coming to iOS · Waitlist open
@@ -86,9 +88,16 @@ export default function Home() {
               </p>
             </div>
           </div>
+
+          {/* Anchored to the hero so it sits in the corner of the city view and
+              scrolls away with it, rather than hovering over the sections
+              below. On phones it drops into flow beneath the form. */}
+          <div className="mt-12 flex sm:absolute sm:bottom-10 sm:right-10 sm:mt-0">
+            <ExploreCityButton />
+          </div>
         </section>
 
-        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-md">
+        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-sm sm:backdrop-blur-md">
           <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
             <div className="mb-16 max-w-2xl">
               <p className="eyebrow mb-4 text-amber-500">The core loop</p>
@@ -119,7 +128,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="border-t border-noir-800/80 bg-noir-900/75 backdrop-blur-md">
+        <section className="border-t border-noir-800/80 bg-noir-900/75 backdrop-blur-sm sm:backdrop-blur-md">
           <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
               <div>
@@ -149,7 +158,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-md">
+        <section className="border-t border-noir-800/80 bg-noir-950/70 backdrop-blur-sm sm:backdrop-blur-md">
           <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.8fr] lg:gap-16">
               <p className="font-display text-display-md font-semibold uppercase text-noir-100">
@@ -172,7 +181,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="border-t border-noir-800/80 bg-noir-950/75 backdrop-blur-md">
+        <section className="border-t border-noir-800/80 bg-noir-950/75 backdrop-blur-sm sm:backdrop-blur-md">
           <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
             <div className="max-w-xl">
               <h2 className="font-display text-display-lg font-bold uppercase text-noir-050">
@@ -203,6 +212,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </>
+    </CityProvider>
   );
 }

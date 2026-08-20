@@ -170,6 +170,20 @@
   .mlabel.sel .nm{color:var(--noir-950) !important}
   .mlabel.sel .mt{color:rgba(17,9,5,.75) !important}
   .mlabel .pin{background:rgba(232,163,61,.45) !important}
+
+  /* Phones: the card is a bottom sheet, not a floating side panel, and the
+     3D labels shrink so they do not swamp a narrow screen. */
+  @media (max-width: 819px){
+    #card,#dcard{
+      top:auto !important; bottom:0 !important;
+      left:0 !important; right:0 !important;
+      width:auto !important; max-height:52vh; overflow-y:auto;
+      border-radius:10px 10px 0 0 !important;
+      border-left:none !important; border-right:none !important; border-bottom:none !important;
+    }
+    .mlabel .nm{font-size:10.5px !important}
+    .mlabel .mt{font-size:9px !important}
+  }
 </style>
 </head>
 <body>
