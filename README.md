@@ -13,22 +13,18 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000.
+Then open http://localhost:3000. No configuration is required: the Supabase
+URL and publishable key ship as defaults in `src/lib/supabase.ts`, so a fresh
+clone and a fresh deploy both work with nothing set.
 
-Create a `.env.local` first (it is gitignored):
+Neither is a secret. `NEXT_PUBLIC_*` values are compiled into the JavaScript
+every visitor downloads, so the key is public the moment the site ships. Row
+Level Security protects the data, not secrecy: with that key alone, reading
+the waitlist, reading the admin hash and deleting rows all return 401. It can
+insert a signup and nothing else.
 
-```
-NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable key>
-```
-
-Both are safe to expose to the browser. Row Level Security is what protects
-the data, not the key: `anon` holds `INSERT` on `waitlist` and nothing else.
-
-> The build deliberately does **not** fail when these are missing, so a fresh
-> clone or a misconfigured deploy still builds. The form will accept input and
-> silently save nothing until they are set, so check them first if signups are
-> not landing.
+Set the variables in `.env.example` only to point the site at a different
+Supabase project; where present they override the defaults.
 
 ## Routes
 
@@ -78,5 +74,5 @@ where id = 1;
 
 ## Deploying
 
-Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in the host's
-environment variables for Production, Preview and Development, then redeploy.
+Nothing to configure. `vercel.json` declares the Next.js framework and the
+Supabase defaults are committed, so a connected repo deploys as-is.
