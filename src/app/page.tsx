@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CityBackground from "@/components/CityBackground";
 import ExploreCityButton from "@/components/ExploreCityButton";
 import { CityProvider } from "@/components/city-context";
@@ -46,9 +47,19 @@ export default function Home() {
       <div className="page-shell relative z-10">
         <header className="sticky top-0 z-40 border-b border-noir-800 bg-noir-950">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 sm:px-10">
-            <span className="font-display text-2xl font-extrabold uppercase tracking-[0.06em] text-noir-050">
-              Stockio
-            </span>
+            <a href="/" className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt=""
+                width={40}
+                height={40}
+                priority
+                className="h-9 w-9 sm:h-10 sm:w-10"
+              />
+              <span className="font-display text-2xl font-extrabold uppercase tracking-[0.06em] text-noir-050">
+                Stockio
+              </span>
+            </a>
             <a
               href="#waitlist"
               className="eyebrow text-noir-100 transition-colors duration-200 hover:text-amber-400"
@@ -202,8 +213,11 @@ export default function Home() {
 
         <footer className="border-t border-noir-800/80 bg-noir-950/90">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
-            <span className="font-display text-lg font-bold uppercase tracking-[0.06em] text-noir-200">
-              Stockio
+            <span className="flex items-center gap-2.5">
+              <Image src="/logo.png" alt="" width={24} height={24} className="h-6 w-6 opacity-80" />
+              <span className="font-display text-lg font-bold uppercase tracking-[0.06em] text-noir-200">
+                Stockio
+              </span>
             </span>
             <p className="text-sm text-noir-300">
               &copy; {new Date().getFullYear()} Stockio. Skill-based

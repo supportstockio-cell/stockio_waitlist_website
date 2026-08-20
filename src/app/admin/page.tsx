@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -92,6 +93,14 @@ export default function AdminPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-noir-950 px-6">
         <div className="w-full max-w-sm">
+          <Image
+            src="/logo.png"
+            alt=""
+            width={56}
+            height={56}
+            priority
+            className="mb-5 h-14 w-14"
+          />
           <p className="eyebrow mb-3 text-amber-500">Stockio</p>
           <h1 className="font-display text-4xl font-extrabold uppercase text-noir-050">
             Waitlist admin
@@ -141,11 +150,14 @@ export default function AdminPage() {
     <main className="min-h-screen bg-noir-950">
       <header className="border-b border-noir-800">
         <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-10">
-          <div>
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="" width={40} height={40} className="h-10 w-10" />
+            <div>
             <p className="eyebrow text-amber-500">Stockio</p>
             <h1 className="mt-1 font-display text-3xl font-extrabold uppercase text-noir-050">
               Waitlist
             </h1>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
