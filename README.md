@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stockio waitlist
 
-## Getting Started
+Landing page and email waitlist for **Stockio**, a mobile city builder where
+your stock calls earn you buildings modeled on real companies, and those
+buildings rise and fall with the real market.
 
-First, run the development server:
+Built with Next.js 16 (App Router), Tailwind CSS v4 and Supabase.
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` first (it is gitignored):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable key>
+```
 
-## Learn More
+Both are safe to expose to the browser. Row Level Security is what protects
+the data, not the key: `anon` holds `INSERT` on `waitlist` and nothing else.
 
-To learn more about Next.js, take a look at the following resources:
+> The build deliberately does **not** fail when these are missing, so a fresh
+> clone or a misconfigured deploy still builds. The form will accept input and
+> silently save nothing until they are set, so check them first if signups are
+> not landing.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Route         | What it is                                      |
+| ------------- | ----------------------------------------------- |
+| `/`           | Landing page and waitlist signup                 |
+| `/admin`      | Password-gated list of signups, `noindex`        |
+| `/robots.txt` | Generated, disallows `/admin`                    |
 
-## Deploy on Vercel
+## The 3D city
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`public/city/` holds a self-contained Three.js scene used as the page
+backdrop. It is embedded in an iframe rather than imported, so its ~6k lines
+stay out of the app bundle.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Three.js is **vendored** in `public/city/vendor/`. There is no CDN call at
+  runtime.
+- The scene mounts after hydration, keeping ~2MB off the critical path.
+  Reduced-motion and Save-Data visitors get a gradient and never load it.
+- Under 820px or 4 CPU cores it runs a `LITE` pipeline: no shadow pass, no
+  antialias, pixel ratio pinned to 1, thinner surrounding city.
+- The backdrop must never sit on a negative `z-index`. It still paints there,
+  but hit testing resolves to `<body>` first and every drag and click dies.
+
+Explore mode is a toggle rather than an always-live canvas because the
+scene's OrbitControls bind wheel-to-zoom, which would otherwise swallow every
+page scroll.
+
+## Admin access
+
+`/admin` asks for a password and lists signups.
+
+The password is **not in this repo and not checked in the browser**. It is
+sent to `admin_list_waitlist(pw)`, a `SECURITY DEFINER` Postgres function that
+compares it against a bcrypt hash in `admin_credential` and only then reads
+the table. The `anon` key alone cannot read the waitlist or the hash, so the
+password is the entire gate.
+
+To change it:
+
+```sql
+update public.admin_credential
+set password_hash = extensions.crypt('<new password>', extensions.gen_salt('bf', 12)),
+    updated_at = now()
+where id = 1;
+```
+
+## Deploying
+
+Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in the host's
+environment variables for Production, Preview and Development, then redeploy.
