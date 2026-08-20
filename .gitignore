@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code local settings
 .claude/
+
+# keep the documented example committed
+!.env.example
