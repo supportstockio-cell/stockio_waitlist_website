@@ -1,4 +1,4 @@
-import Skyline from "@/components/Skyline";
+import CityBackground from "@/components/CityBackground";
 import WaitlistForm from "@/components/WaitlistForm";
 
 const LOOP_STEPS = [
@@ -32,7 +32,9 @@ const FAIR_PLAY = [
 
 export default function Home() {
   return (
-    <div className="bg-noir-950">
+    <div className="relative">
+      <CityBackground />
+
       {/* Nav */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7 sm:px-10">
         <span className="font-display text-xl tracking-[0.02em] text-noir-050">
@@ -40,56 +42,46 @@ export default function Home() {
         </span>
         <a
           href="#waitlist"
-          className="text-sm text-noir-200 underline decoration-noir-700 decoration-1 underline-offset-4 transition-colors duration-200 hover:text-amber-400 hover:decoration-amber-500"
+          className="text-sm text-noir-100 underline decoration-noir-600 decoration-1 underline-offset-4 transition-colors duration-200 hover:text-amber-400 hover:decoration-amber-500"
         >
           Get early access
         </a>
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pt-10 pb-20 sm:px-10 sm:pt-16 sm:pb-28">
-        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-8">
-          <div className="animate-rise-in">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
-              Coming to iOS · Waitlist open
-            </p>
-            <h1 className="font-display text-display-xl text-noir-050">
-              The market
-              <br />
-              builds your <em className="not-italic text-amber-500">city.</em>
-            </h1>
-            <p className="mt-7 max-w-[42ch] text-lg leading-relaxed text-noir-200 sm:text-xl">
-              Build a city powered by the real stock market — no real money,
-              all the stakes.
-            </p>
-            <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-noir-400">
-              Predict the day&rsquo;s move, earn points for accuracy, and
-              acquire buildings modeled on real companies. Every building you
-              own keeps living, rising and falling with what that company
-              actually does in the market.
-            </p>
+      <section className="mx-auto max-w-6xl px-6 pt-16 pb-32 sm:px-10 sm:pt-24 sm:pb-44">
+        <div className="max-w-2xl animate-rise-in">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
+            Coming to iOS · Waitlist open
+          </p>
+          <h1 className="font-display text-display-xl text-noir-050">
+            The market
+            <br />
+            builds your <em className="not-italic text-amber-500">city.</em>
+          </h1>
+          <p className="mt-7 max-w-[42ch] text-lg leading-relaxed text-noir-100 sm:text-xl">
+            Build a city powered by the real stock market — no real money,
+            all the stakes.
+          </p>
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-noir-200">
+            Predict the day&rsquo;s move, earn points for accuracy, and
+            acquire buildings modeled on real companies. Every building you
+            own keeps living, rising and falling with what that company
+            actually does in the market.
+          </p>
 
-            <div id="waitlist" className="mt-10 max-w-lg scroll-mt-28">
-              <WaitlistForm />
-              <p className="mt-3 text-xs text-noir-400">
-                Free to join. No real-money trading, ever. Unsubscribe
-                anytime.
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="animate-rise-in"
-            style={{ animationDelay: "0.15s" }}
-            aria-hidden={false}
-          >
-            <Skyline />
+          <div id="waitlist" className="mt-10 max-w-lg scroll-mt-28">
+            <WaitlistForm />
+            <p className="mt-3 text-xs text-noir-300">
+              Free to join. No real-money trading, ever. Unsubscribe
+              anytime.
+            </p>
           </div>
         </div>
       </section>
 
       {/* The Loop */}
-      <section className="border-t border-noir-800">
+      <section className="border-t border-noir-800 bg-noir-950/85 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
           <div className="mb-14 max-w-xl">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-amber-500">
@@ -111,7 +103,7 @@ export default function Home() {
                   <h3 className="font-display text-xl text-noir-050">
                     {step.title}
                   </h3>
-                  <p className="mt-2 max-w-[42ch] text-[15px] leading-relaxed text-noir-400">
+                  <p className="mt-2 max-w-[42ch] text-[15px] leading-relaxed text-noir-300">
                     {step.body}
                   </p>
                 </div>
@@ -122,7 +114,7 @@ export default function Home() {
       </section>
 
       {/* Stakes / fairness statement */}
-      <section className="border-t border-noir-800 bg-noir-900/40">
+      <section className="border-t border-noir-800 bg-noir-900/90 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_0.8fr] lg:gap-16">
             <p className="font-display text-display-md text-noir-100">
@@ -145,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* Second CTA */}
-      <section className="border-t border-noir-800">
+      <section className="border-t border-noir-800 bg-noir-950/90 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10 sm:py-28">
           <div className="max-w-xl">
             <h2 className="font-display text-display-lg text-noir-050">
@@ -153,7 +145,7 @@ export default function Home() {
               <br />
               break ground.
             </h2>
-            <p className="mt-5 text-[15px] leading-relaxed text-noir-400">
+            <p className="mt-5 text-[15px] leading-relaxed text-noir-300">
               Join before launch and get founder pricing on your first Credits
               pack, plus early access the day the doors open on iOS.
             </p>
@@ -165,7 +157,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-noir-800">
+      <footer className="border-t border-noir-800 bg-noir-950/95">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
           <span className="font-display text-base text-noir-200">
             Stockio
