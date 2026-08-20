@@ -41,17 +41,19 @@ export default function Home() {
     <>
       <CityBackground />
 
-      <div className="page-shell relative">
-        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7 sm:px-10">
-          <span className="font-display text-2xl font-extrabold uppercase tracking-[0.06em] text-noir-050">
-            Stockio
-          </span>
-          <a
-            href="#waitlist"
-            className="eyebrow text-noir-200 transition-colors duration-200 hover:text-amber-400"
-          >
-            Get early access
-          </a>
+      <div className="page-shell relative z-10">
+        <header className="sticky top-0 z-40 border-b border-noir-800 bg-noir-950">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 sm:px-10">
+            <span className="font-display text-2xl font-extrabold uppercase tracking-[0.06em] text-noir-050">
+              Stockio
+            </span>
+            <a
+              href="#waitlist"
+              className="eyebrow text-noir-100 transition-colors duration-200 hover:text-amber-400"
+            >
+              Get early access
+            </a>
+          </div>
         </header>
 
         {/* Hero sits on the scrim alone, no panel behind it, so the city reads
@@ -70,7 +72,7 @@ export default function Home() {
               Build a city powered by the real stock market. No real money,
               all the stakes.
             </p>
-            <p className="mt-4 max-w-[54ch] text-[15px] leading-relaxed text-noir-200">
+            <p className="mt-4 max-w-[54ch] text-[17px] leading-relaxed text-noir-100">
               Call where a stock is heading, earn points when you are right,
               and spend them on buildings modeled on real companies. Every
               building you own keeps trading with the market that built it.
@@ -78,7 +80,7 @@ export default function Home() {
 
             <div id="waitlist" className="mt-10 max-w-lg scroll-mt-28">
               <WaitlistForm />
-              <p className="mt-3 text-xs text-noir-300">
+              <p className="mt-3 text-sm text-noir-200">
                 Free to join. No real-money trading, ever. Unsubscribe
                 anytime.
               </p>
@@ -107,7 +109,7 @@ export default function Home() {
                     <h3 className="font-display text-2xl font-bold uppercase tracking-[0.02em] text-noir-050">
                       {step.title}
                     </h3>
-                    <p className="mt-2 max-w-[44ch] text-[15px] leading-relaxed text-noir-300">
+                    <p className="mt-2 max-w-[44ch] text-[17px] leading-relaxed text-noir-200">
                       {step.body}
                     </p>
                   </div>
@@ -127,7 +129,7 @@ export default function Home() {
                   <br />
                   Take their block.
                 </h2>
-                <p className="mt-6 max-w-[46ch] text-[15px] leading-relaxed text-noir-300">
+                <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-noir-200">
                   Every call you make is scored against every other player.
                   The leaderboard is the real game. Your city is just the
                   scoreboard everyone else can see.
@@ -137,7 +139,7 @@ export default function Home() {
                 {LEADERBOARD.map((item) => (
                   <li
                     key={item}
-                    className="text-[15px] leading-relaxed text-noir-200"
+                    className="text-[17px] leading-relaxed text-noir-100"
                   >
                     {item}
                   </li>
@@ -160,7 +162,7 @@ export default function Home() {
                 {FAIR_PLAY.map((item) => (
                   <li
                     key={item}
-                    className="text-[15px] leading-relaxed text-noir-200"
+                    className="text-[17px] leading-relaxed text-noir-100"
                   >
                     {item}
                   </li>
@@ -178,7 +180,7 @@ export default function Home() {
                 <br />
                 to break ground.
               </h2>
-              <p className="mt-6 text-[15px] leading-relaxed text-noir-300">
+              <p className="mt-6 text-[17px] leading-relaxed text-noir-200">
                 Join before launch for founder pricing on your first Credits
                 pack, plus early access the day the doors open on iOS.
               </p>
@@ -194,7 +196,7 @@ export default function Home() {
             <span className="font-display text-lg font-bold uppercase tracking-[0.06em] text-noir-200">
               Stockio
             </span>
-            <p className="text-xs text-noir-400">
+            <p className="text-sm text-noir-300">
               &copy; {new Date().getFullYear()} Stockio. Skill-based
               prediction game. No real-money wagering.
             </p>

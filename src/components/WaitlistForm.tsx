@@ -82,13 +82,13 @@ export default function WaitlistForm({ compact = false }: { compact?: boolean })
             }}
             aria-invalid={status === "error"}
             aria-describedby={status === "error" ? `${inputId}-error` : undefined}
-            className="w-full rounded-sm border border-noir-700 bg-noir-900/60 px-4 py-3.5 text-[15px] text-noir-050 placeholder:text-noir-400 outline-none transition-colors duration-200 focus:border-amber-500"
+            className="w-full rounded-sm border border-noir-700 bg-noir-900/60 px-4 py-3.5 text-base text-noir-050 placeholder:text-noir-400 outline-none transition-colors duration-200 focus:border-amber-500"
           />
         </div>
         <button
           type="submit"
           disabled={status === "loading"}
-          className="group relative shrink-0 overflow-hidden rounded-sm bg-amber-500 px-7 py-3.5 text-[15px] font-semibold text-noir-950 transition-colors duration-200 hover:bg-amber-400 disabled:cursor-wait disabled:opacity-70"
+          className="group relative shrink-0 overflow-hidden rounded-sm bg-amber-500 px-7 py-3.5 text-base font-semibold text-noir-950 transition-colors duration-200 hover:bg-amber-400 disabled:cursor-wait disabled:opacity-70"
         >
           {status === "loading" ? "Joining…" : "Join the Waitlist"}
         </button>

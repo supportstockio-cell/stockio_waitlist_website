@@ -8,12 +8,20 @@ import { useEffect, useState } from "react";
  *
  * Two modes, because the scene's OrbitControls bind wheel-to-zoom: left live,
  * the iframe would swallow every scroll and the page could not move. So by
- * default the iframe is inert (pointer-events: none) and the city is pure
- * atmosphere. "Explore" hands input over to the scene, fades the page copy out
- * and lets you orbit and click buildings for their company card.
+ * default the iframe is inert and the city is pure atmosphere. "Explore" hands
+ * input over to the scene, steps the page copy aside, and lets you orbit and
+ * click buildings for their company card.
+ *
+ * Stacking matters here: the backdrop must never sit on a negative z-index.
+ * Behind the body box it still paints, but hit testing resolves to <body>
+ * first, so drags and clicks never reach the canvas. It sits at z-0 instead
+ * and is lifted above the copy while exploring. For the same reason the
+ * trigger button is a sibling at z-50 rather than a child of the backdrop,
+ * which would put it under the page copy and make it unclickable.
  */
 export default function CityBackground() {
   const [exploring, setExploring] = useState(false);
+  const [pastCity, setPastCity] = useState(false);
 
   useEffect(() => {
     document.body.dataset.explore = exploring ? "on" : "off";
@@ -28,9 +36,23 @@ export default function CityBackground() {
     return () => window.removeEventListener("keydown", onKey);
   }, [exploring]);
 
+  // The trigger belongs to the city view, so it retires once the copy sections
+  // have taken over the screen rather than floating over them forever.
+  useEffect(() => {
+    const onScroll = () =>
+      setPastCity(window.scrollY > window.innerHeight * 0.72);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-      <div className="fixed inset-0 -z-10 overflow-hidden bg-noir-950">
+      <div
+        className={`fixed inset-0 overflow-hidden bg-noir-950 ${
+          exploring ? "z-30" : "z-0"
+        }`}
+      >
         <iframe
           src="/city/index.html"
           title={exploring ? "Interactive city" : ""}
@@ -52,14 +74,14 @@ export default function CityBackground() {
       </div>
 
       {exploring ? (
-        <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-4 px-6 pb-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-noir-300">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-4 px-6 pb-8">
+          <p className="rounded-sm bg-noir-950/80 px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] text-noir-100 backdrop-blur-md">
             Drag to orbit · Scroll to zoom · Click a building
           </p>
           <button
             type="button"
             onClick={() => setExploring(false)}
-            className="rounded-sm border border-amber-500/40 bg-noir-950/85 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-amber-400 backdrop-blur-md transition-colors duration-200 hover:border-amber-500 hover:text-amber-300"
+            className="pointer-events-auto rounded-sm bg-amber-500 px-7 py-3.5 text-base font-semibold text-noir-950 shadow-lg shadow-noir-950/50 transition-colors duration-200 hover:bg-amber-400"
           >
             Close city view
           </button>
@@ -68,15 +90,19 @@ export default function CityBackground() {
         <button
           type="button"
           onClick={() => setExploring(true)}
-          className="group fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-sm border border-noir-700 bg-noir-950/80 px-5 py-3 backdrop-blur-md transition-colors duration-200 hover:border-amber-500/60"
+          aria-hidden={pastCity}
+          tabIndex={pastCity ? -1 : 0}
+          className={`fixed bottom-8 right-8 z-50 flex items-center gap-2.5 rounded-sm bg-amber-500 px-7 py-3.5 text-base font-semibold text-noir-950 shadow-lg shadow-noir-950/50 transition-all duration-300 hover:bg-amber-400 ${
+            pastCity
+              ? "pointer-events-none translate-y-2 opacity-0"
+              : "opacity-100"
+          }`}
         >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-amber-500" />
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-noir-950 opacity-60 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-noir-950" />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-noir-200 transition-colors duration-200 group-hover:text-amber-400">
-            Explore the city
-          </span>
+          Explore the city
         </button>
       )}
     </>
